@@ -1,16 +1,17 @@
-const API_KEY = '48427757-fc949e79797ba7e940d238484';
-const BASE_URL = 'https://pixabay.com/api/';
 
-export async function fetchImages(query, page = 1, perPage = 20) {
-    const url = `${BASE_URL}?key=${API_KEY}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`;
+export const fetchImages = async (query) => {
+    const API_KEY = '48427757-fc949e79797ba7e940d238484'; 
+    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`;
+
     try {
     const response = await fetch(url);
     if (!response.ok) {
-        throw new Error('Failed to fetch images');
+        throw new Error('API request failed');
     }
-    return await response.json();
+    const data = await response.json();
+    return data.hits;
     } catch (error) {
     console.error(error);
-    throw error;
+    throw new Error('An error occurred while fetching images');
     }
-}
+};

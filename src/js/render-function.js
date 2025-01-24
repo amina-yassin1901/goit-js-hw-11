@@ -1,18 +1,24 @@
-export function createImageMarkup({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) {
+
+
+export const createGalleryCardTemplate = (imgInfo) => {
     return `
-    <a href="${largeImageURL}" class="gallery__item">
-        <img src="${webformatURL}" alt="${tags}" class="gallery__image" />
+    <li class="gallery-item">
+        <a href="${imgInfo.largeImageURL}">
+        <img class="gallery-img" src="${imgInfo.webformatURL}" alt="${imgInfo.tags}" />
+        </a>
         <div class="info">
-        <p><b>Likes:</b> ${likes}</p>
-        <p><b>Views:</b> ${views}</p>
-        <p><b>Comments:</b> ${comments}</p>
-        <p><b>Downloads:</b> ${downloads}</p>
+        <p class="info-item"><b>Likes:</b> ${imgInfo.likes}</p>
+        <p class="info-item"><b>Views:</b> ${imgInfo.views}</p>
+        <p class="info-item"><b>Comments:</b> ${imgInfo.comments}</p>
+        <p class="info-item"><b>Downloads:</b> ${imgInfo.downloads}</p>
         </div>
-    </a>
+    </li>
     `;
+};
+
+export const renderGallery = (images) => {
+    const galleryEl = document.querySelector('.js-gallery');
+    const galleryTemplate = images.map((imgInfo) => createGalleryCardTemplate(imgInfo)).join('');
+    galleryEl.innerHTML = galleryTemplate;
 }
 
-export function renderGallery(images, galleryElement) {
-    const markup = images.map(createImageMarkup).join('');
-    galleryElement.innerHTML = markup;
-}

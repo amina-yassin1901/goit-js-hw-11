@@ -59,7 +59,7 @@ button:hover {
 
 
 
-.gallery {
+.js-gallery {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -69,33 +69,46 @@ button:hover {
   padding: 20px;
 }
 
-.gallery img {
+.js-gallery img {
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 
-.gallery__item {
+.gallery-item {
   width: calc((100% - 48px) / 3);
   text-decoration: none;
   color: black;
 }
 
-.gallery__image {
+.gallery-image {
   width: 100%;
   height: auto;
   display: block;
 }
 
 .info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 10px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
   text-align: left;
 }
 
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
 .loader {
   text-align: center;
   margin-top: 16px;
+}
+
+.hidden {
+  display: none;
 }

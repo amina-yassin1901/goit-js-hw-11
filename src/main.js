@@ -1,4 +1,3 @@
-
 import { fetchImages } from './js/pixabay-api.js';
 import { renderGallery } from './js/render-function.js';
 import SimpleLightbox from 'simplelightbox';
@@ -6,39 +5,46 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-const form = document.querySelector('.search-form');
-const input = document.querySelector('.form-input');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
-let lightbox = new SimpleLightbox('.gallery a');
-let page = 1;
+const searchFormEl = document.querySelector('.js-search-form');
+const galleryEl = document.querySelector('.js-gallery');
 
-form.addEventListener('submit', onFormSubmit);
 
-async function onFormSubmit(event) {
+const onSearchFormSubmit = async (event) => {
     event.preventDefault();
-    const query = input.value.trim();
-    if (!query) {
-    iziToast.warning({ title: 'Warning', message: 'Please enter a search term!' });
+
+    const searchQuery = event.currentTarget.elements.query.value.trim();
+    if (searchQuery === '') {
+    iziToast.error({ title: 'Error', message: 'Please enter a search term' });
     return;
     }
 
-    gallery.innerHTML = '';
-    loader.style.display = 'block';
+    galleryEl.innerHTML = '';
 
     try {
-    const data = await fetchImages(query, page);
-    loader.style.display = 'none';
+    
+    const loader = document.querySelector('.loader');
+    loader.classList.remove('hidden');
 
-    if (data.hits.length === 0) {
-        iziToast.error({ title: 'No Results', message: 'Sorry, no images match your search query.' });
+    const images = await fetchImages(searchQuery);
+    
+    
+    if (images.length === 0) {
+        iziToast.info({ title: 'No results', message: 'No images found. Please try again.' });
         return;
     }
 
-    renderGallery(data.hits, gallery);
-    lightbox.refresh();
+    
+    renderGallery(images);
     } catch (error) {
-    iziToast.error({ title: 'Error', message: 'Something went wrong. Please try again later.' });
-    loader.style.display = 'none';
+    iziToast.error({ title: 'Error', message: 'Something went wrong!' });
+    } finally {
+    
+    const loader = document.querySelector('.loader');
+    loader.classList.add('hidden');
     }
-}
+    const lightbox = new SimpleLightbox('.js-gallery a');
+    lightbox.refresh();
+};
+
+
+searchFormEl.addEventListener('submit', onSearchFormSubmit);
